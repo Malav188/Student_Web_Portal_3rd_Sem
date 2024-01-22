@@ -1,0 +1,15 @@
+{% extends "main/base.html" %}
+{% block body %}
+
+    <form id="emailForm">
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" cols="50"></textarea>
+        <br>
+        <button type="button" onclick="sendEmail()">Send Email</button>
+        {% load static %}
+    <a href="tel:+91 6351692129">+91 8485919493</a>
+    </form>
+
+
+
+{% endblock %}

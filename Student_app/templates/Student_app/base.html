@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <title>Student Website</title>/ -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title> Student Website </title>
+ {% block css %}{% endblock %}
+    <style>
+    .body{
+      align-items:auto;
+      margin-left: 5%;
+      margin-right: 5%;
+
+      background-color:#e3f3ef;
+      border-radius: 5px;
+      position: relative;
+    }
+
+    .head{
+      text-align:left;
+    }
+    .h1{
+      color:black;
+      text-align: left;
+      margin-bottom: 4px;
+    }
+    .d-flex {
+      text-align: right;
+    }
+
+    /* .section-1 {
+      text-align: center;
+    } */
+
+    .navbar  {
+      color: black;
+      text-align: center;
+      /* margin: 2px; */
+      font:bold;
+      background-color: #417690 ;
+      /* background-color: blue; */
+      padding: 4px;
+      border-radius: 4px;
+      text-decoration: none;
+
+    }
+
+.fw-bold:link {
+  text-decoration: none;
+}
+
+.fw-bold:visited {
+  text-decoration: none;
+}
+
+.fw-bold:hover {
+  /* text-decoration: underline; */
+  background-color: white;
+  color:black;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.fw-bold:active {
+  /* text-decoration: underline;
+   */
+   background-color: white;
+   color: black;
+}
+
+
+    .fw-bold{
+      color: white;
+      padding-inline: 8px;
+      text-align: center;
+    }
+    .footer{
+
+      margin-top: 10%;
+      padding: 10px;
+      text-align: center;
+      background: #417690 ;
+      color: #ffae00;
+      border-radius: 5px;
+    }
+    .head{
+      width: 100%;
+      display: table;
+      table-layout: fixed;
+
+    }
+    .photo,content{
+      display: table-cell;
+      vertical-align: middle;
+    }
+    .photo{
+      width: 40%;
+
+    }
+    .photo img {
+      max-width: 100%;
+      height: auto;
+      margin-left: 100px;
+    }
+    .content{
+      width: 60%;
+      padding: 15px;
+      color: #ffae00;
+
+    }
+  </style>
+</head>
+
+<body class="body my-4 mx-100px">
+  <header>
+    <div class="head " >
+      <span class='photo'>
+        {% load static %}
+        <img src="{% static 'Student_app/images/logo.jpg' %}" alt="">
+      </span>
+      <span class="content">
+        <h1><b>Student Management System</b></h1>
+      </span>
+    </div>
+
+    <div>
+      <nav class="navbar my-4">
+        
+        
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button> -->
+      
+        
+          <ul class="nav">
+            
+            <li class="nav-item ">
+              <a class="fw-bold my-2 mx-4" href="{% url 'main home' %}">Student Website</a>
+            </li>
+
+            <li class="nav-item ">
+              <a class="fw-bold  my-2 mx-4" href="{% url 'student home' %}">Home </a>
+            </li>
+
+              {% if request.user.is_authenticated%}
+                  <li class="nav-item">
+              <a class="fw-bold my-2 mx-4" href="{% url 'student result' %}">Result</a>
+              </li>
+                  <li class="nav-item">
+              <a class="fw-bold my-2 mx-4" href="{% url 'student signout' %}">SignOut</a>
+              </li>
+                  {% else %}
+              <li class="nav-item">
+                  <a class="fw-bold my-2 mx-4" href="{% url 'student signup' %}">SignUp</a>
+              </li>
+
+              <li class="nav-item">
+                  <a class="fw-bold my-2 mx-4" href="{% url 'student signin' %}">SignIn</a>
+              </li>
+                  <li class="nav-item">
+                  <a class="fw-bold my-2 mx-4" href="{% url 'student forgot' %}">Forgot Password</a>
+              </li>
+              {% endif %}
+
+      <form method='get' action='/student/search/' class="fw-bold " >
+        <span>
+            <input class="form-control " type="search" placeholder="Search here..." aria-label="Search" name="search" id="search">
+           
+        </span>
+          </form>
+          </ul>
+
+      </nav>
+      {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong>{{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{%endfor%}
+
+        </div>
+  </header>
+<!-- Get SEM Modal -->
+<div class="modal fade" id="GetSemModal" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginLabel">Enter The Sem</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+      <div class="modal-body">
+                {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong>{{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{%endfor%}
+
+      <form action="{{ url_name }}" method="post" id="login-form">{% csrf_token %}
+          <div class="form-group">
+            <label for="sem">SEM</label>
+              <input class="form-control" type="text" id="sem" name="sem" placeholder="SEM" minlength="1" maxlength="1" required style="text-align: left">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Get Enroll Modal -->
+<div class="modal fade" id="GetEnrollModal" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginLabel">Enter Your Enrollment Number</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+      <div class="modal-body">
+                {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong>{{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{%endfor%}
+
+      <form action="{{ url_name }}" method="post" id="login-form">{% csrf_token %}
+          <div class="form-group">
+            <label for="username">Enrollment Number</label>
+              <input type="text" class=" form-control my-2" id="username" name="username"
+                       autofocus minlength="12" maxlength="12" placeholder="Enrollment Number" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Get Email Modal -->
+<div class="modal fade" id="GetEmailModal" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginLabel">Enter Your Email Here</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+      <div class="modal-body">
+                {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong>{{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{%endfor%}
+
+      <form action="{{ url_name }}" method="post" id="login-form">{% csrf_token %}
+          <div class="form-group">
+
+              <label for="email">{{ form.email.label }}</label>
+              <input type="email" placeholder="Email" id="email" required name="{{ form.email.name }}"
+                       class="form-control my-2{% if form.email.errors %}invalid{% endif %}"
+                       value="{{ email|default_if_none:'' }}" autofocus>
+          </div>
+
+          <div id="signupcap" class="form-group"></div>
+          <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- SignIn Modal -->
+<div class="modal fade" id="SignInModal" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginLabel">SignIn Here</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+      </div>
+      <div class="modal-body">
+                {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+      <strong>Message:</strong>{{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{%endfor%}
+
+      <form action="{% url 'student signin' %}" method="post" id="login-form">{% csrf_token %}
+          <div class="form-group">
+              <label for="enroll">{{ form.enrollment_number.label }}</label>
+              <input type="text" id="enroll" placeholder="Enrollment Number" name="{{ form.enrollment_number.name }}"
+                       class=" form-control  my-2 {% if form.enrollment_number.errors %}invalid{% endif %}"
+                       {% if enrollment_value %}value="{{ enrollment_value }}" {% endif %} autofocus minlength="12" maxlength="12" required>
+          </div>
+          <div class="form-group">
+              <label for="password-input">{{ form.password.label }}</label>
+              <span  id="cpassword-toggle" onclick="togglePasswordVisibility('cpassword-toggle','cpassword-input')">Show</span>
+              <input type="password" placeholder="Password" id="cpassword-input" name="{{ form.password.name }}"
+                       class=" form-control my-2 {% if form.password.errors %}invalid{% endif %}"
+                       value="{{ password|default_if_none:'' }}">
+            </div>
+
+            <div id="signincap" class="form-group"></div>
+          <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <section class="section-1 center-align">
+    {% block body %} {% endblock %}
+
+  </section>
+  <footer class="footer">
+    <div>
+      <h4>Made By Makwana Mohit | Kavaiya Neha</h4>
+
+      <a href=""></a>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+    {% block js %} {% endblock %}
+</body>
+
+</html>

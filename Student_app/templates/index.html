@@ -1,10 +1,50 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Student_app/style.css' %}">
 </head>
 <body>
-$END$
+    <div class="container py-5 login-box">
+        <h3>Sign In</h3>
+        <form action="{% url 'student signin' %}"  method="post">
+            {% csrf_token %}
+
+            <div class="user-box">
+                {{ register.enrollment_number }}
+                {{ register.enrollment_number.label_tag }}
+            </div>
+            <div class="user-box">
+                {{ register.password}}
+                {{ register.password.label_tag }}
+            </div>
+            <div class="user-box">
+                {{ register.captcha }}
+                {{ register.captcha.label_tag }}
+
+
+                <button type="submit" class="btn btn-primary btn-block btn-large" >
+                Signin</button>
+                <a href="{% url 'student signup' %}">register</a>
+            </div>
+        </form>
+        <div class="reset" style="margin-top: 20px;">
+            <a href="{% url 'student forgot' %}" style="all: unset; text-decoration: none;color: #95bee5; margin: 3px;">reset password</a>
+
+        </div>
+        {% if messages %}
+        <ul class="messages" style="color:#93f3f3;">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div>
+    </div>
 </body>
 </html>

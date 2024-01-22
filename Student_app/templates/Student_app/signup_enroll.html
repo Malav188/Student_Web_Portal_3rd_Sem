@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get enroll</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Student_app/style.css' %}">
+</head>
+<body>
+    <div class="container py-5 login-box">
+        <form action="{{ url_name }}"  method="post">
+            {% csrf_token %}
+              <div class="user-box">
+                <input type="text" id="username" name="username" minlength="12" maxlength="12" required>
+                <label for="username">Enter Enrollment Number:</label>
+            </div>
+            <div class="button">
+            <button type="submit" class="btn btn-primary btn-block btn-large" >
+               Submit</button>
+            </div>
+        </form>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
