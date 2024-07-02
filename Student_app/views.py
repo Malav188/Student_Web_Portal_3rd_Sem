@@ -27,9 +27,8 @@ from weasyprint import HTML,CSS
 
 # @login_required(login_url='/student/signin')
 def home(request):
-    messages.success(request,'this is success 1')
-    messages.success(request,'this is success 2')
-    messages.error(request,'this is error 2')
+    from Student_app.utils import generate_fake_students
+    # generate_fake_students()
     return render(request,"Student_app\home.html",{'user':request.user})
 
 def signup(request):
@@ -57,7 +56,7 @@ def signup(request):
                 st.save()
 
                 # emal part is here
-                subject = 'password for student account account'
+                subject = 'password for student account'
                 current_url = get_current_site(request)
                 message_body = render_to_string('password_mail.html',{
                     'enroll' : enroll,
@@ -266,10 +265,20 @@ def result(request):
             'sem':True,
             'pdf':True
         })
-
-
-
-    return render(request,'Student_app/result.html',{'url_name':reverse('student result')})
+    sem = []
+    try:
+        student = appstu.objects.get(stu_enroll=request.user.username)
+        marks = Student_Marks.objects.get_queryset().filter(student=student)
+        for mark in marks:
+            se = mark.stu_sem
+            if se not in sem:sem.append(se)
+    except Exception as e:
+        messages.error(request, "marks entry for you is not done yet please try after your result date declare")
+        return redirect(reverse('student home'))
+    if not sem:
+        messages.error(request,"marks entry for you is not done yet please try after your result date declare")
+        return redirect(reverse('student home'))
+    return render(request,'Student_app/result.html',{'url_name':reverse('student result'),'sem_information':sem})
 
 
 

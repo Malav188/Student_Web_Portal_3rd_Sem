@@ -94,7 +94,7 @@ class Student_MarksAdmin(admin.ModelAdmin):
               'stu_branch_code','stu_name','stu_sem','session','stu_term','stu_theory_ESE',
               'stu_theory_PA', 'stu_practical_ESE','stu_practical_PA']
     list_display = ('id', 'stu_enroll', 'sub_name', 'stu_sub_code', 'stu_name', 'Assigned_Sub_Faculty', 'stu_sem')
-    list_filter = ('sub_name','stu_branch_code')
+    list_filter = ('sub_name','stu_branch_code','stu_sem','Assigned_Sub_Faculty',)
     actions = ['generate_excel','process_xlsx']
 
     def changelist_view(self, request, extra_context=None):
@@ -201,6 +201,8 @@ class upload_from_xlsxAdmin(admin.ModelAdmin):
                         except KeyError:
                             messages.error(request,'there is error with this excel file please check model name and use only excel file that generate from this site')
                             return redirect('/admin/Student_app/upload_from_xlsx/')
+                        except Exception:
+                            pass
             else:
                 for index, row in df.iterrows():
                     try:

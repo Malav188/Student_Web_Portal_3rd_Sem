@@ -25,5 +25,5 @@ urlpatterns = [
     path('',include('main.urls')),
     path('captcha/',include('captcha.urls')),
     path('student',include('Student_app.urls')),
-    path('faculty/',include('faculty.urls'))
+    path('faculty',include('faculty.urls'))
 ]

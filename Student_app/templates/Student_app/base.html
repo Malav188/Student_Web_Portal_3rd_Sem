@@ -205,7 +205,11 @@
       <form action="{{ url_name }}" method="post" id="login-form">{% csrf_token %}
           <div class="form-group">
             <label for="sem">SEM</label>
-              <input class="form-control" type="text" id="sem" name="sem" placeholder="SEM" minlength="1" maxlength="1" required style="text-align: left">
+              <select class="form-control" type="text" id="sem" name="sem" placeholder="SEM" minlength="1" maxlength="1" required style="text-align: left">
+                        {% for se in sem_information %}
+                            <option value="{{ se }}">{{ se }}</option>
+                        {% endfor %}
+                    </select>
           </div>
           <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
         </form>
@@ -323,7 +327,7 @@
   </section>
   <footer class="footer">
     <div>
-      <h4>Made By Makwana Mohit | Kavaiya Neha</h4>
+      <h4>Made By Makwana Mohit</h4>
 
       <a href=""></a>
     </div>

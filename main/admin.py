@@ -7,7 +7,7 @@ from .models import *
 class Sub_SyllabusAdmin(admin.ModelAdmin):
     model = Sub_Syllabus
     list_display = ('sub_code','sub_name','sub_sem','sub_branch_code','sub_credit','sub_academic_term','Assigned_Sub_Faculty')
-    list_filter = ('sub_branch_code',)
+    list_filter = ('sub_branch_code','sub_sem')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'Assigned_Sub_Faculty':
@@ -31,6 +31,6 @@ class GtuExamAdmin(admin.ModelAdmin):
     model = GtuExam
     fields = ['subject','sub_code', 'sub_sem','sub_branch_code', 'sub_academic_term', 'sub_session', 'sub_pdf']
     list_display = ('sub_code', 'sub_academic_term', 'sub_session')
-    list_filter = ('sub_branch_code',)
+    list_filter = ('sub_branch_code','sub_sem')
     def get_readonly_fields(self, request, obj=None):
         return ['sub_code','sub_sem']

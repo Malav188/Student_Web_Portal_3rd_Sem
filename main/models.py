@@ -8,7 +8,7 @@ from faculty.models import Faculty_Records
 from django.dispatch import receiver
 from datetime import datetime
 from django.db.models.signals import post_save,pre_save
-
+from user.models import Faculty
 # Create your models here.
 
 # Create your models here.

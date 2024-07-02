@@ -1,0 +1,124 @@
+{% extends 'faculty/base.html' %}
+{% block css %}
+	<style>
+    .hello{
+        background-color: #90bcb1;
+        border-radius: 5px;
+    }
+    .card-login{
+        background-color: #e3f3ef;
+    }
+    .form-input{
+        border: 2px solid #141c1a;
+        background-color: #90bcb1;
+    }
+    .divider:after,
+.divider:before {
+content: "";
+flex: 1;
+height: 1px;
+background: #eee;
+}
+.h-custom {
+height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+.h-custom {
+height: 100%;
+}
+}
+    </style>
+{% endblock %}
+{% block body %}
+	<section class="p-5 hello">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+          {% load static %}
+        <img src="{% static 'Student_app/images/signin image.webp' %}"
+          class="img-fluid" alt="Sample image">
+      </div>
+
+        <div class="col-lg-6 mb-5 mb-lg-0 ">
+          <div class="card card-login">
+            <div class="card-body py-5 px-md-5">
+                <h5 style="justify-content: left" class="fc-header-title" id="loginLabel">Login Here</h5>
+                          <form action="{% url 'student signin' %}" method="post" id="login-form">{% csrf_token %}
+                <div class="form-outline mb-4">
+
+                    <input type="text" id="enroll" placeholder="Enrollment Number" name="{{ form.enrollment_number.name }}"
+                       class=" form-control form-input  {% if form.enrollment_number.errors %}invalid{% endif %}"
+                       {% if enrollment_value %}value="{{ enrollment_value }}" {% endif %} autofocus minlength="12" maxlength="12" required>
+                <label for="enroll">{{ form.enrollment_number.label }}</label>
+                </div>
+                <div class="form-outline mb-4">
+                    <input type="password" placeholder="Password" id="password-input" name="{{ form.password.name }}"
+                       class=" form-control form-input {% if form.password.errors %}invalid{% endif %}"
+                       value="{{ password|default_if_none:'' }}">
+                <span  id="password-toggle" onclick="togglePasswordVisibility('password-toggle','password-input')">Show</span>
+                <label for="password-input">{{ form.password.label }}</label>
+
+
+                </div>
+                  <div id="parentcap" class="row">
+{##}
+                  <div class="col-md-6 mb-4">
+                    <div id="captcha-content" class="form-outline">
+                      {{ form.captcha }}
+                    </div>
+
+
+                  </div>
+                    <div class="col-md-6 mb-4">
+                    <div id="captcha-image" class="form-outline">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block mb-4">
+                  Sign In
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block js %}
+    <script>
+
+        function togglePasswordVisibility(pst,psi) {
+            var passwordField = document.getElementById(psi);
+            var passwordToggle = document.getElementById(pst);
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                passwordToggle.textContent = "Hide";
+            } else {
+                passwordField.type = "password";
+                passwordToggle.textContent = "Show";
+            }
+        }
+        var class1 = document.getElementById("captcha-content");
+        var class2Container = document.getElementById("captcha-image")
+        var helloImage = class1.querySelector(".captcha");
+        helloImage.style.width = "140px";
+        class2Container.appendChild(helloImage.cloneNode(true));
+        helloImage.remove()
+        var captimghello = document.getElementById("id_captcha_1")
+        captimghello.classList.add("form-control")
+        captimghello.placeholder = "Captcha";
+        var rowt = document.getElementById("parentcap");
+        var crow = document.getElementById("signincap");
+        crow.appendChild(rowt.cloneNode(true));
+        captimghello.classList.add("form-input")
+        document.addEventListener('DOMContentLoaded', function() {
+            var myModal = new bootstrap.Modal(document.getElementById('SignInModal'));
+            myModal.show();});
+
+
+    </script>
+{% endblock %}

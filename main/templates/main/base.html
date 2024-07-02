@@ -159,7 +159,7 @@
               <a class="fw-bold my-2 mx-4" href="{% url 'student home' %}">Student Portal</a>
               </li>
                   <li class="nav-item">
-              <a class="fw-bold my-2 mx-4" href="/admin/">Fadulty/Admin page</a>
+              <a class="fw-bold my-2 mx-4" href="{% url 'faculty home' %}">Faculty/Admin page</a>
               </li>
 
 
@@ -202,36 +202,6 @@
           <div class="form-group">
             <label for="sem">SEM</label>
               <input class="form-control" type="text" id="sem" name="sem" placeholder="SEM" minlength="1" maxlength="1" required style="text-align: left">
-          </div>
-          <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Get Enroll Modal -->
-<div class="modal fade" id="GetEnrollModal" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="loginLabel">Enter Your Enrollment Number</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
-      </div>
-      <div class="modal-body">
-                {% for message in messages %}
-    <div class="alert alert-{% if message.tags == 'error'%}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
-      <strong>Message:</strong>{{message}}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{%endfor%}
-
-      <form action="{{ url_name }}" method="post" id="login-form">{% csrf_token %}
-          <div class="form-group">
-            <label for="username">Enrollment Number</label>
-              <input type="text" class=" form-control my-2" id="username" name="username"
-                       autofocus minlength="12" maxlength="12" placeholder="Enrollment Number" required>
           </div>
           <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
         </form>
@@ -291,7 +261,7 @@
     </div>
 {%endfor%}
 
-      <form action="{% url 'student signin' %}" method="post" id="login-form">{% csrf_token %}
+      <form action="{% url 'faculty signin' %}" method="post" id="login-form">{% csrf_token %}
           <div class="form-group">
               <label for="enroll">{{ form.enrollment_number.label }}</label>
               <input type="text" id="enroll" placeholder="Enrollment Number" name="{{ form.enrollment_number.name }}"
@@ -322,7 +292,7 @@
   </section>
   <footer class="footer">
     <div>
-      <h4>Made By Makwana Mohit | Kavaiya Neha</h4>
+      <h4>Made By Makwana Mohit</h4>
 
       <a href=""></a>
     </div>

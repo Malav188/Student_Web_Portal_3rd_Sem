@@ -1,0 +1,73 @@
+{% extends "admin/login.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  {% block theme %}
+    {% include 'material/admin/includes/admin-out-themes.html' %}
+  {% endblock %}
+  <link rel="stylesheet" type="text/css" href="{% static 'material/admin/css/layout.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'material/admin/css/login.min.css' %}">
+  {% if current_theme and current_theme != 'default' %}
+    <link rel="stylesheet" type="text/css" href="{% static 'material/admin/css/admin-out-'|add:current_theme|add:'.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'material/admin/css/admin-out.min.css' %}">
+  {% endif %}
+  <script src="{% static 'material/admin/js/password-toggle.min.js' %}" defer></script>
+{% endblock %}
+
+{% block branding %}{% endblock %}
+{% block inside_container %}{% endblock %}
+{% block tray %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+{% block side_nav %}{% endblock %}
+
+
+{% block content %}
+  <div id="layout-content">
+    <div class="text-content">
+      {% if form.errors and not form.non_field_errors %}
+      <p class="errornote">
+        {% if form.errors.items|length == 1 %}
+        {% trans "Please correct the error below." %}
+        {% else %}
+        {% trans "Please correct the errors below." %}
+        {% endif %}
+      </p>
+      {% endif %}
+
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <p class="errornote">
+            {{ error }}
+          </p>
+        {% endfor %}
+      {% endif %}
+      {% if user.is_authenticated %}
+        <p class="errornote">
+          {% blocktrans trimmed %}
+          You are authenticated as {{ username }}, but are not authorized to
+          access this page. Would you like to login to a different account?
+          {% endblocktrans %}
+        </p>
+      {% endif %}
+
+    <form action="{% url 'student seeder' %}" method="post" style="width: 60%">
+    {% csrf_token %}
+    <label for="selection1">Selection 1:</label>
+    <select id="selection1" name="selection1">
+        <option value="1">student seed</option>
+        <option value="2">superuser feed</option>
+        <option value="3">subsyllabus feed</option>
+    </select>
+
+    <input type="submit" value="Submit">
+    </form>
+    </div>
+    <div class="side-bar">
+      {% include 'material/admin/includes/admin-out-bg.html' with current_theme=current_theme %}
+    </div>
+  </div>
+{% endblock %}
+
+
+

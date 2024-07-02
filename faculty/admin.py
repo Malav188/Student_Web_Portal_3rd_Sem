@@ -4,8 +4,14 @@ from .models import *
 
 @admin.register(Faculty_Records)
 class Faculty_RecordsAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        if not request.user.is_superuser:
+            return Faculty_Records.objects.filter(email=request.user.email)
+        return super().get_queryset(request)
     def get_readonly_fields(self, request, obj=None):
-        return ['user']+list(super().get_readonly_fields(request,obj))
+        li = ['user']+list(super().get_readonly_fields(request,obj))
+        if not request.user.is_superuser:li.append('email')
+        return li
 
     def has_change_permission(self, request, obj=None):
         if obj and 'nonedit@' in obj.email:

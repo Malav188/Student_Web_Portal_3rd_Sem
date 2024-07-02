@@ -45,7 +45,25 @@ def home(request):
     return render(request,'main/home.html')
 
 def syllabus(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        sem = request.GET.get('sem',None)
+        branch = request.GET.get('branch',None)
+        sub_code = request.GET.get('sub_code',None)
+        queryset = Sub_Syllabus.objects.all()
+        if sub_code:
+            queryset = Sub_Syllabus.objects.filter(sub_code=sub_code)
+        if branch and branch != '00' :
+            queryset = queryset.filter(sub_branch_code=branch)
+        if queryset.count() == 0:
+            messages.error(request, "The syllabus is not present for this filters")
+        if sem or branch or sub_code:
+            return render(request, 'main/syllabus.html',
+                      {'branches': branchlist, 'queryset': queryset, 'branchid':branch,'sem':str(sem),
+                       'sub_code': sub_code})
+        return render(request, 'main/syllabus.html', {'branches': branchlist, 'input': True})
+
+
+    elif request.method == 'POST':
         sem = request.POST['sem']
         branch = request.POST['branch']
         sub_code = request.POST['sub_code']
