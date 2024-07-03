@@ -11,6 +11,8 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponse,Http404
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from Student_app.forms import Student_login
 from .models import Faculty_Records
 from Student_app.utils import generate_password
 from user.models import Faculty,User
@@ -22,7 +24,9 @@ import random,string
 from .models import *
 from django.conf import settings
 from django.conf.urls.static import static
-from .forms import Faculty_register
+from .forms import Faculty_register,Faculth_login
+from .utitls import login_not_required_restric
+
 # Create your views here.
 
 def home(request):
@@ -84,8 +88,53 @@ def signup(request):
 
     form = Faculty_register()
     return render(request, "faculty/signup.html",{"form": form,'url_name':reverse('faculty signup'),'email':email})
+@login_not_required_restric
 def signin(request):
-    return render(request,'faculty/signin.html')
+    if request.method == "POST":
+        form = Faculth_login(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            pass1= request.POST['password']
+            user = authenticate(username = email, password = pass1)
+            if user is not None:
+                if user.role == User.Role.FACULTY:
+                    login(request,user)
+                    next = request.GET.get('next',None)
+                    if next:
+                        return redirect(next)
+
+                    return redirect('faculty home')
+                else:
+                    messages.error(request, "You logged in wrong Page with these id and password please login in this page")
+                    if user.role == User.Role.ADMIN:
+                        return redirect('admin:index')
+                    elif user.role == User.Role.STUDENT:
+                        return redirect('student signin')
+
+            else:
+                form = Faculth_login()
+                messages.error(request,'Please Enter a valid username or password for login')
+                return render(request, "faculty\signin.html", {
+                    'form': form,
+                    'email': email
+                })
+
+
+        else:
+            form = Faculth_login()
+            messages.error(request,'Please enter a valid captcha ')
+            return render(request, "faculty\signin.html", {
+                'form': form,
+                'email':request.POST.get('email',""),
+                'password': request.POST['password']
+            })
+
+    form = Faculth_login()
+    return render(request,"faculty\signin.html",{
+        'form':form,
+
+    })
+
 def forgot(request):
     email = ''
     if request.method == 'POST':
@@ -123,3 +172,8 @@ def forgot(request):
 
     form = Faculty_register()
     return render(request, "faculty/signup.html",{"form": form,'url_name':reverse('faculty forgot'),'email':email,'forgot':True})
+
+
+def signout(request):
+    logout(request)
+    return redirect('faculty signin')

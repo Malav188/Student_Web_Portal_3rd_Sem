@@ -7,3 +7,8 @@ import random ,string
 class Faculty_register(forms.Form):
     email = forms.EmailField()
     captcha = CaptchaField()
+
+class Faculth_login(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(required=True,widget=forms.PasswordInput)
+    captcha = CaptchaField()

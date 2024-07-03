@@ -89,10 +89,21 @@ class StudentAdmin(admin.ModelAdmin):
 @admin.register(Student_Marks)
 class Student_MarksAdmin(admin.ModelAdmin):
     model = Student_Marks
-
-    fields = ['id','student','subject','Assigned_Sub_Faculty','stu_sub_code','sub_name',
-              'stu_branch_code','stu_name','stu_sem','session','stu_term','stu_theory_ESE',
-              'stu_theory_PA', 'stu_practical_ESE','stu_practical_PA']
+    fieldsets = (
+        ('Enrollment number and other Info ', {
+            'classes': ('collapse',),
+            'fields': ('id', 'student', 'subject', 'stu_sub_code',
+                       'Assigned_Sub_Faculty', 'stu_branch_code', 'stu_sem'),
+        }),
+        ('Marks ,Session and Term ', {
+            'classes': ('collapse',),
+            'fields': ('session', 'stu_term', 'stu_theory_ESE',
+                       'stu_theory_PA', 'stu_practical_ESE', 'stu_practical_PA'),
+         }),
+        )
+    # fields = ['id','student','subject','Assigned_Sub_Faculty','stu_sub_code','sub_name',
+    #           'stu_branch_code','stu_name','stu_sem','session','stu_term','stu_theory_ESE',
+    #           'stu_theory_PA', 'stu_practical_ESE','stu_practical_PA']
     list_display = ('id', 'stu_enroll', 'sub_name', 'stu_sub_code', 'stu_name', 'Assigned_Sub_Faculty', 'stu_sem')
     list_filter = ('sub_name','stu_branch_code','stu_sem','Assigned_Sub_Faculty',)
     actions = ['generate_excel','process_xlsx']

@@ -30,7 +30,8 @@ class Sub_SyllabusAdmin(admin.ModelAdmin):
 class GtuExamAdmin(admin.ModelAdmin):
     model = GtuExam
     fields = ['subject','sub_code', 'sub_sem','sub_branch_code', 'sub_academic_term', 'sub_session', 'sub_pdf']
-    list_display = ('sub_code', 'sub_academic_term', 'sub_session')
+    list_display = ('sub_code', 'sub_sem','type','sub_academic_term', 'sub_session','subject','sub_pdf')
     list_filter = ('sub_branch_code','sub_sem')
+    list_order = ['sub_sem','sub_academic_term','type']
     def get_readonly_fields(self, request, obj=None):
         return ['sub_code','sub_sem']

@@ -1,4 +1,6 @@
 # from faculty.models import *
+import os
+
 from django.db import models
 from django.contrib import admin
 from datetime import date
@@ -48,14 +50,25 @@ def add_PA(sender,instance,*args,**kwargs):
     instance.sub_id = f'{instance.sub_branch_code}-{instance.sub_code}'
 
 class GtuExam(models.Model):
-    id = models.IntegerField(unique=True,primary_key=True,auto_created=True,default=1)
+    class Type(models.TextChoices):
+        REGULAR = 'REGULAR' , 'Regular'
+        REMEDIAL = 'REMEDIAL', 'Remedial'
+    id = models.AutoField(primary_key=True)
     subject = models.ForeignKey(Sub_Syllabus,on_delete=models.SET_NULL,null=True)
     sub_code = models.CharField(max_length=7,default='0000000')
     sub_branch_code = models.CharField(max_length=2,default='16')
     sub_sem = models.IntegerField(default=0)
     sub_academic_term = models.CharField(max_length=5)
     sub_session = models.CharField(max_length=6)
+    type = models.CharField(max_length=10, choices=Type.choices,default=Type.REGULAR)
     sub_pdf = models.FileField(upload_to='home/pdfs/exam')
+
+    def delete(self, *args, **kwargs):
+        # Delete the file first to avoid leaving orphaned files
+        if self.sub_pdf:
+            if os.path.isfile(self.sub_pdf.path):
+                os.remove(self.sub_pdf.path)
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return str(self.sub_code)

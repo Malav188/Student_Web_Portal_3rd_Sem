@@ -1,10 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks</title>
 </head>
 <body>
-$END$
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Student</th>
+                <th>Enrollment No</th>
+                <th>Semester</th>
+                <th>Term</th>
+                <th>Name</th>
+                <th>Subject</th>
+                <th>Subject Name</th>
+                <th>Assigned Faculty</th>
+                <th>Branch Code</th>
+                <th>Subject Code</th>
+                <th>Session</th>
+                <th>Theory ESE</th>
+                <th>Theory PA</th>
+                <th>Practical ESE</th>
+                <th>Practical PA</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mark in query %}
+                <tr>
+                    <td><a href="">{{ mark.id }}</a></td>
+                    <td>{{ mark.student }}</td>
+                    <td>{{ mark.stu_enroll }}</td>
+                    <td>{{ mark.stu_sem }}</td>
+                    <td>{{ mark.stu_term }}</td>
+                    <td>{{ mark.stu_name }}</td>
+                    <td>{{ mark.subject }}</td>
+                    <td>{{ mark.sub_name }}</td>
+                    <td>{{ mark.Assigned_Sub_Faculty }}</td>
+                    <td>{{ mark.stu_branch_code }}</td>
+                    <td>{{ mark.stu_sub_code }}</td>
+                    <td>{{ mark.session }}</td>
+                    <td>{{ mark.stu_theory_ESE }}</td>
+                    <td>{{ mark.stu_theory_PA }}</td>
+                    <td>{{ mark.stu_practical_ESE }}</td>
+                    <td>{{ mark.stu_practical_PA }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

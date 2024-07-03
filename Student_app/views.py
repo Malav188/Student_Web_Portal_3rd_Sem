@@ -118,9 +118,9 @@ def signin(request):
                 else:
                     messages.error(request, "You logged in wrong Page with these id and password please login in this page")
                     if user.role == User.Role.ADMIN:
-                        return redirect('/admin/')
+                        return redirect('admin:index')
                     elif user.role == User.Role.FACULTY:
-                        return redirect('student signup')
+                        return redirect('faculty signin')
 
             else:
                 form = Student_login()
