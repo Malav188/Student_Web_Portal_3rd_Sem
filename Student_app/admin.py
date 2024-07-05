@@ -60,7 +60,8 @@ class StudentAdmin(admin.ModelAdmin):
                     )
 
                         stu.save()
-                    except:
+                    except Exception as e:
+                        print(e)
                         pass
                 baclog = Student_Marks.objects.filter(student=student,is_passed=False)
                 for bac in baclog:
@@ -72,7 +73,8 @@ class StudentAdmin(admin.ModelAdmin):
                         session=SESSION
                     )
                         stu.save()
-                    except:
+                    except Exception as e:
+                        print(e)
                         pass
     make_marks_entry_for_Summer_Session.short_description = "make new marks entry for Summer session of all subjects"
     make_marks_entry_for_Winter_Session.short_description = "make new marks entry for Winter session of all subjects"
@@ -129,14 +131,14 @@ class Student_MarksAdmin(admin.ModelAdmin):
         }),
         ('Marks ,Session and Term ', {
             'classes': ('collapse',),
-            'fields': (('session' ,'stu_term','is_passed'), ('stu_theory_ESE',
+            'fields': (('session' ,'stu_term','is_passed','marks_entered'), ('stu_theory_ESE',
                                                  'stu_theory_PA', 'stu_practical_ESE', 'stu_practical_PA')),
          }),
         )
     # fields = ['id','student','subject','Assigned_Sub_Faculty','stu_sub_code','sub_name',
     #           'stu_branch_code','stu_name','stu_sem','session','stu_term','stu_theory_ESE',
     #           'stu_theory_PA', 'stu_practical_ESE','stu_practical_PA']
-    list_display = ('id', 'stu_enroll', 'sub_name', 'stu_sub_code', 'stu_name', 'Assigned_Sub_Faculty', 'stu_sem','is_passed')
+    list_display = ('id','marks_entered', 'stu_enroll', 'sub_name', 'stu_sub_code', 'stu_name', 'Assigned_Sub_Faculty', 'stu_sem','is_passed')
     list_filter = ('sub_name','stu_branch_code','stu_sem','Assigned_Sub_Faculty','session','year')
     actions = ['generate_excel','process_xlsx']
 

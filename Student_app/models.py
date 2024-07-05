@@ -53,6 +53,7 @@ class Student_Marks(models.Model):
     stu_theory_PA = models.IntegerField(default=0)
     stu_practical_ESE = models.IntegerField(default=0)
     stu_practical_PA= models.IntegerField(default=0)
+    marks_entered = models.BooleanField(default=False)
     is_passed = models.BooleanField(default=True)
 
     def clean(self):

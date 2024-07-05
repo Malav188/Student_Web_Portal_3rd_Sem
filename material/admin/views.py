@@ -50,13 +50,23 @@ class ThemesView(TemplateView):
             return themes[0]
         return _('Default')
 
-class DashbordView(TemplateView):
+class FacultyDashbordView(TemplateView):
     title = _('Dashbord')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
             'title': self.title,
-            'dddname':'mohit is greate coder',
+            'dddname':' this is faculty dashboard mohit is greate coder',
+            **(self.extra_context or {})
+        })
+        return context
+class AdminDashbordView(TemplateView):
+    title = _('Dashbord')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'title': self.title,
+            'dddname':'this is admin dashboard mohit is greate coder',
             **(self.extra_context or {})
         })
         return context
