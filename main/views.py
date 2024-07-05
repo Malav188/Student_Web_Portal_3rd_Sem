@@ -86,7 +86,7 @@ def gtu_exam_fetch():
 
 
 def home(request):
-    gtu_exam_fetch()
+    # gtu_exam_fetch()
     return render(request,'main/home.html')
 
 def syllabus(request):

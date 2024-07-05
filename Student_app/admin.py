@@ -10,15 +10,28 @@ import pandas as pd
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.shortcuts import render,redirect
+from datetime import datetime
+
+
 # Register your models here.
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     model = Student
-    fields = ['stu_name','stu_enroll','stu_sem','stu_DOB','stu_branch','stu_branch_code','stu_mobile_num','stu_parents_mobile_num','stu_address']
-    list_display = ('stu_enroll','stu_name','stu_branch','stu_sem')
+    fieldsets = (
+        ("Student's personal details ", {
+            'classes': ('collapse',),
+            'fields': (('stu_name', 'stu_DOB'), ('stu_mobile_num', 'stu_parents_mobile_num'), 'stu_address'),
+        }),
+        ("Student's Academic Details  ", {
+            'classes': ('collapse',),
+            'fields': (('stu_enroll','stu_sem', ), ('stu_branch', 'stu_branch_code')),
+        }),
+    )
+    # fields = ['stu_name','stu_enroll','stu_sem','stu_DOB','stu_branch','stu_branch_code','stu_mobile_num','stu_parents_mobile_num','stu_address','is_passed']
+    list_display = ('stu_enroll','stu_name','stu_branch','stu_sem','is_passed')
     list_filter = ('stu_sem','stu_branch')
-    actions = ['make_marks_field','generate_excel', 'upload_excel']
+    actions = ['make_marks_entry_for_Summer_Session','make_marks_entry_for_Winter_Session','generate_excel', 'upload_excel']
 
     def changelist_view(self, request, extra_context=None):
         if 'action' in request.POST and ( request.POST['action'] == 'generate_excel' or  request.POST['action'] == 'make_marks_field'):
@@ -30,21 +43,39 @@ class StudentAdmin(admin.ModelAdmin):
                         post.update({ACTION_CHECKBOX_NAME:str(stu)})
                         request._set_post(post)
         return super(StudentAdmin,self).changelist_view(request,extra_context)
-    def make_marks_field(self,request,queryset):
+    def make_marks_entry_for_Winter_Session(self,request,queryset,):
+        return self.make_marks_entry_for_Summer_Session(request,queryset,Sub_Syllabus.Session.WINTER)
+    def make_marks_entry_for_Summer_Session(self,request,queryset,SESSION = Sub_Syllabus.Session.SUMMER):
         from main.models import Sub_Syllabus
         for student in queryset:
-            stu_subjects = Sub_Syllabus.objects.filter(sub_sem=student.stu_sem,sub_branch_code=student.stu_branch_code)
-            for subjects in stu_subjects:
-                try:
-                    stu = Student_Marks.objects.create(
-                    student=student,
-                    subject=subjects,
-                    session=subjects.session
-                )
-                    stu.save()
-                except:
-                    pass
-    make_marks_field.short_description = "make new marks entri for all subjects"
+            if student.is_passed:
+                stu_subjects = Sub_Syllabus.objects.filter(sub_sem=student.stu_sem,sub_branch_code=student.stu_branch_code)
+                for subjects in stu_subjects:
+                    try:
+                        stu = Student_Marks.objects.create(
+                        student=student,
+                        subject=subjects,
+                        session=SESSION,
+                        year = datetime.now().year
+                    )
+
+                        stu.save()
+                    except:
+                        pass
+                baclog = Student_Marks.objects.filter(student=student,is_passed=False)
+                for bac in baclog:
+                    subjects = bac.subject
+                    try:
+                        stu = Student_Marks.objects.create(
+                        student=student,
+                        subject=subjects,
+                        session=SESSION
+                    )
+                        stu.save()
+                    except:
+                        pass
+    make_marks_entry_for_Summer_Session.short_description = "make new marks entry for Summer session of all subjects"
+    make_marks_entry_for_Winter_Session.short_description = "make new marks entry for Winter session of all subjects"
 
     def delete_selected(self, request, queryset):
         # Exclude objects with roll number '1111'
@@ -53,6 +84,7 @@ class StudentAdmin(admin.ModelAdmin):
         return super().delete_selected(request, queryset=None)
 
     def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:return True
         if obj and '1111' in obj.stu_enroll:
             return False
         super().has_change_permission(request, obj)
@@ -60,7 +92,7 @@ class StudentAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         # if obj and '1111' in obj.stu_enroll:
         #     return [field.name for field in obj._meta.fields]
-        return ['stu_branch']
+        return ['stu_branch','stu_enroll','stu_branch_code']
 
     def has_delete_permission(self, request, obj=None):
         # Prevent deletion if the roll number is '1111'
@@ -92,20 +124,20 @@ class Student_MarksAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Enrollment number and other Info ', {
             'classes': ('collapse',),
-            'fields': ('id', 'student', 'subject', 'stu_sub_code',
-                       'Assigned_Sub_Faculty', 'stu_branch_code', 'stu_sem'),
+            'fields': (('student','subject',
+                       'Assigned_Sub_Faculty'), ('stu_branch_code', 'stu_sem')),
         }),
         ('Marks ,Session and Term ', {
             'classes': ('collapse',),
-            'fields': ('session', 'stu_term', 'stu_theory_ESE',
-                       'stu_theory_PA', 'stu_practical_ESE', 'stu_practical_PA'),
+            'fields': (('session' ,'stu_term','is_passed'), ('stu_theory_ESE',
+                                                 'stu_theory_PA', 'stu_practical_ESE', 'stu_practical_PA')),
          }),
         )
     # fields = ['id','student','subject','Assigned_Sub_Faculty','stu_sub_code','sub_name',
     #           'stu_branch_code','stu_name','stu_sem','session','stu_term','stu_theory_ESE',
     #           'stu_theory_PA', 'stu_practical_ESE','stu_practical_PA']
-    list_display = ('id', 'stu_enroll', 'sub_name', 'stu_sub_code', 'stu_name', 'Assigned_Sub_Faculty', 'stu_sem')
-    list_filter = ('sub_name','stu_branch_code','stu_sem','Assigned_Sub_Faculty',)
+    list_display = ('id', 'stu_enroll', 'sub_name', 'stu_sub_code', 'stu_name', 'Assigned_Sub_Faculty', 'stu_sem','is_passed')
+    list_filter = ('sub_name','stu_branch_code','stu_sem','Assigned_Sub_Faculty','session','year')
     actions = ['generate_excel','process_xlsx']
 
     def changelist_view(self, request, extra_context=None):
@@ -146,10 +178,10 @@ class Student_MarksAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         base = ['id','stu_sem','stu_branch_code','sub_name','stu_term','stu_name','stu_enroll','stu_sub_code']
         if obj:
-            return ['student','subject','session']+base
+            return ['student','subject','session','Assigned_Sub_Faculty']+base
         if request.user.is_superuser:
             return base
-        return base+['student','subject','session']
+        return base+['student','subject','session','Assigned_Sub_Faculty']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'student':
@@ -190,11 +222,17 @@ class upload_from_xlsxAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+    def get_queryset(self, request):
+        if not request.user.is_superuser:
+            return upload_from_xlsx.objects.filter(model_name=upload_from_xlsx.name_model.STUDENTMARKS)
+        query = super().get_queryset(request)
+
     def process_xlsx(modeladmin, request, queryset):
         for quir in queryset:
             xlsx_path = quir.xlsx_file.path
             df = pd.read_excel(xlsx_path)
-            if quir.model_name == upload_from_xlsx.name_model.STUDENT:
+            if quir.model_name == upload_from_xlsx.name_model.STUDENT and request.user.is_superuser:
                 if request.user.is_superuser:
                     for index, row in df.iterrows():
                         try:
@@ -214,7 +252,7 @@ class upload_from_xlsxAdmin(admin.ModelAdmin):
                             return redirect('/admin/Student_app/upload_from_xlsx/')
                         except Exception:
                             pass
-            else:
+            elif quir.model_name == upload_from_xlsx.name_model.STUDENTMARKS:
                 for index, row in df.iterrows():
                     try:
                         stu = Student_Marks.objects.get(id=row['id'])

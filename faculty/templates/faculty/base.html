@@ -102,6 +102,14 @@
       width: 40%;
 
     }
+    .btn {
+  border: 2px solid black;
+  background-color: #e3f3ef;
+  color: black;
+  {#padding: 14px 28px;#}
+  font-size: 16px;
+  cursor: pointer;
+}
     .photo img {
       max-width: 100%;
       height: auto;
@@ -119,37 +127,56 @@
 <body class="body my-4 mx-100px">
   <header>
     <div class="head " >
-      <span class='photo'>
-        {% load static %}
-        <img src="{% static 'Student_app/images/logo.jpg' %}" alt="">
-      </span>
-      <span class="content">
-        <h1><b>Student Management System</b></h1>
-      </span>
+{#        <div class="row">#}
+        <div class=container-fluid >
+            {% load static %}
+            <img src="{% static 'Student_app/images/logo.jpg' %}" alt="" align="left">
+            <h1 align="center"  style="color: #ffae00"><b>Student Management System</b></h1>
+
+
+        </div>
     </div>
+{#    </div>#}
 
     <div>
-      <nav class="navbar my-4">
+<nav class="navbar navbar-expand-lg my-2">
+  <div class="container-fluid">
+    <a class="navbar-brand" style="color: white; padding-inline: 8px; text-align: center" href="{% url 'main home' %}">Student Website</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-          <ul class="nav">
-            
-            <li class="nav-item ">
-              <a class="fw-bold my-2 mx-4" href="{% url 'main home' %}">Student Website</a>
-            </li>
+        <li class="nav-item ">
+              <a class="fw-bold my-2 mx-4"  href="{% url 'faculty home' %}">Home </a>
+        </li>
+          {% if request.user.is_authenticated%}
 
-            <li class="nav-item ">
-              <a class="fw-bold  my-2 mx-4" href="{% url 'faculty home' %}">Home </a>
-            </li>
-
-              <li class="nav-item">
-              <a class="fw-bold my-2 mx-4" href="{% url 'faculty signin' %}">Signin</a>
+          <li class="nav-item">
+              <a class="fw-bold my-2 mx-4" href="{% url 'faculty signout' %}">SignOut</a>
               </li>
+                  {% else %}
               <li class="nav-item">
                   <a class="fw-bold my-2 mx-4" href="{% url 'faculty signup' %}">SignUp</a>
+
               </li>
               <li class="nav-item">
-              <a class="fw-bold my-2 mx-4" href="{% url 'faculty forgot' %}">Forgot Password</a>
+                  <a class="fw-bold my-2 mx-4" href="{% url 'faculty signin' %}">SignIn</a>
               </li>
+
+                  <li class="nav-item">
+                  <a class="fw-bold my-2 mx-4" href="{% url 'faculty forgot' %}">Forgot Password</a>
+              </li>
+                  </ul>
+              {% endif %}
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
 
       </nav>
       {% for message in messages %}

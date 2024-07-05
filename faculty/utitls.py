@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.urls import reverse
 
-from user.models import User
+from user.models import Faculty,User
 def user_is_exits(email):
     try:
-        use = User.objects.get(email=email,role=User.Role.FACULTY)
+        use = Faculty.objects.get(email=email,role=User.Role.FACULTY)
         return use
     except User.DoesNotExist:
         return False

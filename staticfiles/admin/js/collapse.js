@@ -1,43 +1,47 @@
-/*global gettext*/
-'use strict';
-{
-    window.addEventListener('load', function() {
-        // Add anchor tag for Show/Hide link
-        const fieldsets = document.querySelectorAll('fieldset.collapse');
-        for (const [i, elem] of fieldsets.entries()) {
-            // Don't hide if fields in this fieldset have errors
-            if (elem.querySelectorAll('div.errors, ul.errorlist').length === 0) {
-                elem.classList.add('collapsed');
-                const h2 = elem.querySelector('h2');
-                const link = document.createElement('a');
-                link.id = 'fieldsetcollapser' + i;
-                link.className = 'collapse-toggle';
-                link.href = '#';
-                link.textContent = gettext('Show');
-                h2.appendChild(document.createTextNode(' ('));
-                h2.appendChild(link);
-                h2.appendChild(document.createTextNode(')'));
-            }
-        }
-        // Add toggle to hide/show anchor tag
-        const toggleFunc = function(ev) {
-            if (ev.target.matches('.collapse-toggle')) {
-                ev.preventDefault();
-                ev.stopPropagation();
-                const fieldset = ev.target.closest('fieldset');
-                if (fieldset.classList.contains('collapsed')) {
-                    // Show
-                    ev.target.textContent = gettext('Hide');
-                    fieldset.classList.remove('collapsed');
-                } else {
-                    // Hide
-                    ev.target.textContent = gettext('Show');
-                    fieldset.classList.add('collapsed');
-                }
-            }
-        };
-        document.querySelectorAll('fieldset.module').forEach(function(el) {
-            el.addEventListener('click', toggleFunc);
-        });
-    });
-}
+// 'use strict';
+// {
+//     const toggleVisibility = function(event) {
+//         if (event.target.classList.contains('collapsed')) {
+//             event.target.classList.remove('collapsed');
+//         } else {
+//             event.target.classList.add('collapsed');
+//         }
+//     };
+//
+//     const addToggleButtons = function(collapseFieldsets) {
+//         collapseFieldsets.forEach(function(fieldset) {
+//             const h2 = fieldset.querySelector('h2');
+//             const toggleButton = document.createElement('button');
+//             toggleButton.setAttribute('class', 'collapse-toggle');
+//             toggleButton.setAttribute('type', 'button');
+//             toggleButton.textContent = fieldset.classList.contains('collapsed') ? 'Show' : 'Hide';
+//             h2.appendChild(document.createTextNode(' '));
+//             h2.appendChild(toggleButton);
+//
+//             toggleButton.addEventListener('click', function(event) {
+//                 event.preventDefault();
+//                 if (fieldset.classList.contains('collapsed')) {
+//                     fieldset.classList.remove('collapsed');
+//                     toggleButton.textContent = 'less';
+//                 } else {
+//                     fieldset.classList.add('collapsed');
+//                     toggleButton.textContent = 'more';
+//                 }
+//             }, { passive: true });
+//
+//             if (fieldset.classList.contains('collapsed')) {
+//                 toggleButton.textContent = 'more';
+//             } else {
+//                 toggleButton.textContent = 'less';
+//             }
+//         });
+//     };
+//
+//     window.addEventListener('load', function() {
+//         const collapseFieldsets = document.querySelectorAll('fieldset.collapse');
+//         collapseFieldsets.forEach(function(fieldset) {
+//             fieldset.classList.add('collapsed'); // Add this line to ensure fieldsets are collapsed by default
+//         });
+//         addToggleButtons(collapseFieldsets);
+//     }, { passive: true });
+// }

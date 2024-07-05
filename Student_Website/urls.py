@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from captcha import urls
+from faculty.views import dashbord
 urlpatterns = [
     # path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     # path('jet/', include('jet.urls', 'jet')),
     # path('grappelli/', include('grappelli.urls')),
-    path('admin/', admin.site.urls,name='admin login'),
+    path('admin/', admin.site.urls,name='admin'),
     path('',include('main.urls')),
     path('captcha/',include('captcha.urls')),
     path('student',include('Student_app.urls')),

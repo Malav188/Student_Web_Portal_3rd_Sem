@@ -23,6 +23,7 @@ class Student(models.Model):
     stu_mobile_num = models.CharField(max_length=10)
     stu_parents_mobile_num = models.CharField(max_length=10)
     stu_address = models.CharField(max_length=300)
+    is_passed = models.BooleanField(default=True)
     def __str__(self):
         return str(self.stu_enroll)
 
@@ -33,7 +34,7 @@ class Student_Marks(models.Model):
         WINTER = 'WINTER' , 'Winter'
         SUMMER = 'SUMMER', 'Summer'
 
-    id = models.CharField(max_length=20,primary_key=True,unique=True,default='hello')
+    id = models.CharField(max_length=25,primary_key=True,unique=True,default='hello')
     student = models.ForeignKey('Student',on_delete=models.DO_NOTHING,default='0')
     stu_enroll = models.CharField(max_length=12,default='enrollmentno')
     stu_sem = models.IntegerField(default=5)
@@ -47,10 +48,12 @@ class Student_Marks(models.Model):
     stu_sub_code = models.IntegerField(default=0)
     session = models.CharField(max_length=50,
                                choices=Session.choices,default=Session.SUMMER)
+    year = models.CharField(max_length=4,default='2022')
     stu_theory_ESE = models.IntegerField(default=0)
     stu_theory_PA = models.IntegerField(default=0)
     stu_practical_ESE = models.IntegerField(default=0)
     stu_practical_PA= models.IntegerField(default=0)
+    is_passed = models.BooleanField(default=True)
 
     def clean(self):
         if self.student.stu_branch_code != self.subject.sub_branch_code or self.student.stu_sem != self.subject.sub_sem:
@@ -102,7 +105,7 @@ def add_prefix_to_id(sender, instance, *args, **kwargs):
 
 @receiver(pre_save, sender=Student_Marks)
 def add_prefix_to_id(sender, instance, *args, **kwargs):
-    new_id= str(instance.session)[0]+str(instance.student.stu_enroll)+str(instance.subject.sub_code)
+    new_id= str(instance.session)[0]+str(instance.year)+str(instance.student.stu_enroll)+str(instance.subject.sub_code)
     if len(instance.id) <15:
         instance.id = new_id
         instance.stu_sem = instance.subject.sub_sem

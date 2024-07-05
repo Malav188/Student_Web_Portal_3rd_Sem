@@ -63,6 +63,7 @@
 
 {% block userlinks %}
     {% block welcome-msg %}{% endblock %}
+    <a href="{% url 'admin:dashbord' %}">Dashbord</a>
     {% if site_url %}
         <a href="{{ site_url }}">{% trans 'View site' %}</a>
     {% endif %}
@@ -88,7 +89,7 @@
     {% csrf_token %}
     <button type="submit">
         {% trans 'Log out' %}
-        {% comment %} <i class="material-icons" aria-hidden="true">exit_to_app</i> {% endcomment %}
+        <i class="material-icons" aria-hidden="true">exit_to_app</i>
     </button>
 </form>
 

@@ -12,7 +12,7 @@ import random,string
 
 def user_is_exits(enroll):
     try:
-        use = User.objects.get(username=enroll)
+        use = Student.objects.get(username=enroll)
         return use
     except User.DoesNotExist:
         return False

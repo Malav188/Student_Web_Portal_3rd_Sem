@@ -29,6 +29,14 @@
       text-align: left;
       margin-bottom: 4px;
     }
+    .btn {
+  border: 2px solid black;
+  background-color: #e3f3ef;
+  color: black;
+  {#padding: 14px 28px;#}
+  font-size: 16px;
+  cursor: pointer;
+}
     .d-flex {
       text-align: right;
     }
@@ -119,57 +127,46 @@
 <body class="body my-4 mx-100px">
   <header>
     <div class="head " >
-      <span class='photo'>
-        {% load static %}
-        <img src="{% static 'Student_app/images/logo.jpg' %}" alt="">
-      </span>
-      <span class="content">
-        <h1><b>Student Management System</b></h1>
-      </span>
+{#        <div class="row">#}
+        <div class=container-fluid >
+            {% load static %}
+            <img src="{% static 'Student_app/images/logo.jpg' %}" alt="" align="left">
+            <h1 align="center"  style="color: #ffae00"><b>Student Management System</b></h1>
+
+
+        </div>
     </div>
+{#    </div>#}
 
     <div>
-      <nav class="navbar my-4">
-        
-        
-        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button> -->
-      
-        
-          <ul class="nav">
-            
-            <li class="nav-item ">
-              <a class="fw-bold my-2 mx-4" href="{% url 'main home' %}">Student Website</a>
-            </li>
+<nav class="navbar navbar-expand-lg my-2">
+  <div class="container-fluid">
+    <a class="navbar-brand" style="color: white; padding-inline: 8px; text-align: center" href="{% url 'main home' %}">Student Website</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-            <li class="nav-item ">
-              <a class="fw-bold  my-2 mx-4" href="{% url 'main home' %}">Home </a>
-            </li>
+        <li class="nav-item ">
+              <a class="fw-bold my-2 mx-4"  href="{% url 'main home' %}">Home </a>
+        </li>
 
-            <li class="nav-item ">
-              <a class="fw-bold  my-2 mx-4" href="{% url 'main syllabus' %}">Syllabus </a>
-            </li>
 
-            <li class="nav-item ">
-              <a class="fw-bold  my-2 mx-4" href="{% url 'main exam' %}">Exam </a>
-            </li>
-
-              <li class="nav-item">
+            <li class="nav-item">
               <a class="fw-bold my-2 mx-4" href="{% url 'student home' %}">Student Portal</a>
               </li>
                   <li class="nav-item">
               <a class="fw-bold my-2 mx-4" href="{% url 'faculty home' %}">Faculty/Admin page</a>
               </li>
-
-
-      <form method='get' action='/student/search/' class="fw-bold " >
-        <span>
-            <input class="form-control " type="search" placeholder="Search here..." aria-label="Search" name="search" id="search">
-           
-        </span>
-          </form>
-          </ul>
+                  </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
 
       </nav>
       {% for message in messages %}

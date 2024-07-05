@@ -58,7 +58,7 @@ def signup(request):
                 # emal part is here
                 subject = 'password for student account'
                 current_url = get_current_site(request)
-                message_body = render_to_string('password_mail.html',{
+                message_body = render_to_string('Student_app/password_mail.html',{
                     'enroll' : enroll,
                     'domain' : current_url.domain,
                     'password' : password,

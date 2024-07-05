@@ -18,14 +18,13 @@ from Student_app.utils import generate_password
 from user.models import Faculty,User
 from main.models import Sub_Syllabus
 from django.urls import reverse
-from Student_app.utils import user_is_exits
 import smtplib
 import random,string
 from .models import *
 from django.conf import settings
 from django.conf.urls.static import static
 from .forms import Faculty_register,Faculth_login
-from .utitls import login_not_required_restric
+from .utitls import login_not_required_restric,user_is_exits
 
 # Create your views here.
 
@@ -177,3 +176,7 @@ def forgot(request):
 def signout(request):
     logout(request)
     return redirect('faculty signin')
+
+
+def dashbord(request):
+    return render(request, "faculty/dashbord.html")
